@@ -2,6 +2,7 @@
 ; A simple boot sector program that prints a message to the screen
 ; using a BIOS ISR (interrupt service routine)
 ;
+[org 0x7c00]         ; initiate code position for address calculation
 
 mov ah, 0x0e         ; int 10/ah = 0eh -> scrolling teletype BIOS routine
 
