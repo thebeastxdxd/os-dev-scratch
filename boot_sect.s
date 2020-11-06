@@ -1,33 +1,34 @@
 ;
-; A simple boot sector program that prints a message to the screen
-; using a BIOS ISR (interrupt service routine)
+; A simple boot sector program that demonstrates the stack
 ;
-[org 0x7c00]         ; initiate code position for address calculation
+;[org 0x7c00]         ; initiate code position for address calculation
 
 mov ah, 0x0e         ; int 10/ah = 0eh -> scrolling teletype BIOS routine
 
-; First attempt
-mov al, the_secret
+mov bp, 0x8000
+mov sp, bp
+
+;mov bx, 'A'
+mov bl, 0
+mov bh, 'A'
+
+push bx
+push 'B'
+push 'C'
+
+pop bx
+mov al, bl
 int 0x10
 
-; Second attempt
-mov al, [the_secret]
+pop bx
+mov al, bl
 int 0x10
 
-; Third attempt 
-mov bx, the_secret
-add bx, 0x7c00
-mov al, [bx]
-int 0x10
 
-; Fourth attempt
-mov al, [0x7c1d]
+mov al, [0x7ffe]
 int 0x10
 
 jmp $              ; Jump to the current address (i.e. forever).
-
-the_secret:
-db "X"
 
 ;
 ; Padding and magic BIOS number.
