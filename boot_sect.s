@@ -3,30 +3,24 @@
 ;
 ;[org 0x7c00]         ; initiate code position for address calculation
 
-mov ah, 0x0e         ; int 10/ah = 0eh -> scrolling teletype BIOS routine
+mov bx, 30
 
-mov bp, 0x8000
-mov sp, bp
+a_label:
+	cmp bx, 4
+	jg b_label
+	mov al, 'A'
+	jmp print
+b_label:
+	cmp bx, 40
+	jge c_label
+	mov al, 'B'
+	jmp print
+c_label:
+	mov al, 'C'
 
-;mov bx, 'A'
-mov bl, 0
-mov bh, 'A'
-
-push bx
-push 'B'
-push 'C'
-
-pop bx
-mov al, bl
-int 0x10
-
-pop bx
-mov al, bl
-int 0x10
-
-
-mov al, [0x7ffe]
-int 0x10
+print:
+	mov ah, 0x0e         ; int 10/ah = 0eh -> scrolling teletype BIOS routine
+	int 0x10
 
 jmp $              ; Jump to the current address (i.e. forever).
 
