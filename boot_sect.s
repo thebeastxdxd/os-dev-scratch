@@ -1,28 +1,27 @@
 ;
 ; A simple boot sector program that demonstrates the stack
 ;
-;[org 0x7c00]         ; initiate code position for address calculation
+[org 0x7c00]         ; initiate code position for address calculation
+mov bp, 0x8500
+mov sp, bp 
 
-mov bx, 30
+mov bx, HELLO_MSG
+call print_string
 
-a_label:
-	cmp bx, 4
-	jg b_label
-	mov al, 'A'
-	jmp print
-b_label:
-	cmp bx, 40
-	jge c_label
-	mov al, 'B'
-	jmp print
-c_label:
-	mov al, 'C'
-
-print:
-	mov ah, 0x0e         ; int 10/ah = 0eh -> scrolling teletype BIOS routine
-	int 0x10
+mov bx, GOODBYE_MSG
+call print_string
+mov dx, 0x1fb6
+call print_hex
 
 jmp $              ; Jump to the current address (i.e. forever).
+
+%include "print_string.asm"
+
+;Data
+HELLO_MSG:
+	db "Hello, World!", 0 
+GOODBYE_MSG:
+	db "Goodbye!", 0
 
 ;
 ; Padding and magic BIOS number.
