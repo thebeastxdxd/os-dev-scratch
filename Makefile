@@ -1,8 +1,12 @@
+ASM = boot_sect.s
+TARGET = boot_sect.bin
 
+$(TARGET): $(ASM) 
+	nasm $^ -f bin -o $(TARGET) 
 
-boot: boot_sect.s
-	nasm boot_sect.s -f bin -o boot_sect.bin
+PHONY: clean, run
+run: 
+	qemu-system-i386 $(TARGET)
 
-
-run: boot_sect.bin
-	qemu-system-i386 boot_sect.bin
+clean:
+	rm -f $(TARGET)
