@@ -1,5 +1,6 @@
-ASM = boot_sect.s
+ASM = boot_sect.s 
 TARGET = boot_sect.bin
+DEPS = print_string.asm
 
 $(TARGET): $(ASM) 
 	nasm $^ -f bin -o $(TARGET) 
